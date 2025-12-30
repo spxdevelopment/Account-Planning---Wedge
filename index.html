@@ -692,35 +692,57 @@ async function runDetailed() {
 }
 
 /* =========================================
-   GEMINI CALLER (PRO MODEL FIX)
+   GEMINI CALLER (SMART FALLBACK)
    ========================================= */
 async function callGemini(prompt) {
   document.getElementById('loader').style.display = 'block';
   document.getElementById('output-wrapper').style.display = 'none';
 
-  // Use 'gemini-pro' to fix 'Not Found' errors on v1beta
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+  // 1. Try "flash" first
+  let modelName = 'gemini-1.5-flash';
+  let url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
   
+  let data = await tryFetch(url, prompt);
+
+  // 2. If fail, try "pro" (Standard)
+  if (!data) {
+    modelName = 'gemini-pro';
+    url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+    data = await tryFetch(url, prompt);
+  }
+
+  // 3. If fail, try "1.0-pro" (Legacy)
+  if (!data) {
+    modelName = 'gemini-1.0-pro';
+    url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+    data = await tryFetch(url, prompt);
+  }
+
+  document.getElementById('loader').style.display = 'none';
+
+  if (!data) {
+    alert("AI Error: Could not connect to any Gemini model. Check API Key permissions.");
+    return null;
+  }
+
+  return data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
+}
+
+async function tryFetch(url, prompt) {
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
     });
-    
     const data = await res.json();
-    document.getElementById('loader').style.display = 'none';
-
-    if(data.error) {
-      alert("AI Error: " + data.error.message);
+    if (data.error) {
+      console.warn("Model Failed:", url, data.error);
       return null;
     }
-    
-    return data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
-
+    return data;
   } catch (e) {
-    document.getElementById('loader').style.display = 'none';
-    alert("Connection Error: " + e.message);
+    console.warn("Fetch Error:", e);
     return null;
   }
 }
