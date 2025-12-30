@@ -8,6 +8,10 @@ app.use(express.json({ limit: "2mb" }));
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+app.get("/", (req, res) => {
+  res.send("SalesSparx backend is running.");
+});
+
 app.post("/api/chat", async (req, res) => {
   try {
     const { prompt, model = "gpt-4o-mini" } = req.body;
@@ -29,4 +33,4 @@ app.post("/api/chat", async (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Server running on ${port}`));
+app.listen(port, () => console.log(`Server running on port ${port}`));
