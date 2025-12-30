@@ -5,282 +5,383 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SalesSparx Wedge Portal</title>
   <style>
-    /* SALESSPARX BRANDING & CORE STYLES */
+    /* =========================================
+       SALESSPARX BRAND GUIDELINES (Jan 2024)
+       ========================================= */
     :root {
-      --primary: #00A7B3; /* SPX Teal */
-      --secondary: #EB5C22; /* SPX Orange */
-      --dark-bg: #1F2933;
-      --light-bg: #ECEFF3;
-      --card-bg: #FFFFFF;
-      --text-color: #1F2933;
+      /* Primary Colors */
+      --spx-black: #000000;
+      --spx-teal: #4CA09A;
+      --spx-red: #CA2027; /* Primary Accent */
+      
+      /* Secondary Colors */
+      --spx-orange: #EE6C3C;
+      --spx-yellow: #FFF33B;
+      --spx-dark-teal: #147E76;
+
+      /* UI Colors */
+      --bg-light: #F4F6F8;
+      --card-white: #FFFFFF;
+      --text-main: #1F2933;
+      --border-color: #E1E4E8;
     }
 
     body {
       margin: 0;
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      background-color: var(--light-bg);
-      color: var(--text-color);
+      font-family: 'Avenir', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-main);
       line-height: 1.6;
     }
 
-    /* LAYOUT UTILS */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
+    /* UTILITIES */
+    .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
     .hidden { display: none !important; }
-
+    .text-teal { color: var(--spx-teal); }
+    .text-red { color: var(--spx-red); }
+    
     /* HEADER */
     header {
-      background: white;
-      padding: 1rem 2rem;
-      border-bottom: 4px solid var(--primary);
+      background: var(--card-white);
+      padding: 1.5rem 2rem;
+      border-bottom: 4px solid var(--spx-teal);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
     
-    .logo {
-      font-weight: 800;
-      font-size: 1.5rem;
-      color: var(--text-color);
-      text-decoration: none;
-    }
-    .logo span { color: var(--secondary); }
-
-    .api-key-wrapper {
-      display: flex;
-      gap: 10px;
-      align-items: center;
+    .logo-img {
+      height: 50px; /* Adjust based on your actual image file */
+      width: auto;
     }
 
-    /* MENU CARDS (HOME) */
+    /* HOME MENU GRID */
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 2rem;
-      margin-top: 2rem;
+      margin-top: 3rem;
     }
 
     .menu-card {
-      background: white;
-      padding: 2.5rem;
-      border-radius: 12px;
-      border: 1px solid #e1e4e8;
-      transition: transform 0.2s, box-shadow 0.2s;
+      background: var(--card-white);
+      padding: 3rem 2rem;
+      border-radius: 8px;
+      border-top: 6px solid var(--spx-black); /* Default border */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
       cursor: pointer;
+      transition: all 0.3s ease;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 250px;
     }
 
     .menu-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-      border-color: var(--primary);
+      border-top-color: var(--spx-red); /* Hover accent */
     }
 
-    .menu-card h3 { color: var(--primary); margin-top: 0; font-size: 1.5rem; }
-    .menu-card p { color: #666; font-size: 0.95rem; }
-    
-    /* FORMS & INPUTS */
+    .menu-card h3 {
+      font-size: 1.8rem;
+      margin: 0 0 1rem 0;
+      color: var(--spx-black);
+    }
+
+    .menu-card p {
+      color: #666;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    /* APP VIEWS */
     .app-view {
-      background: white;
+      background: var(--card-white);
       border-radius: 8px;
-      padding: 2rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+      padding: 3rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       margin-top: 2rem;
+      min-height: 600px;
     }
 
-    h1, h2 { color: var(--text-color); }
-    h2 { border-bottom: 2px solid var(--secondary); padding-bottom: 0.5rem; margin-bottom: 1.5rem; display: inline-block; }
+    .view-header {
+      border-bottom: 2px solid var(--spx-teal);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    label { display: block; font-weight: bold; margin-top: 1rem; color: var(--text-color); font-size: 0.9rem; }
-    input[type="text"], input[type="password"], textarea, select {
+    .view-header h2 {
+      margin: 0;
+      color: var(--spx-black);
+      font-size: 2rem;
+    }
+
+    /* FORMS & INPUTS */
+    .form-group { margin-bottom: 1.5rem; }
+    
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--spx-black);
+      font-size: 0.95rem;
+    }
+
+    input[type="text"], textarea, select {
       width: 100%;
       padding: 12px;
-      margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      box-sizing: border-box;
+      font-size: 1rem;
       font-family: inherit;
+      transition: border 0.2s;
     }
 
-    textarea { min-height: 100px; resize: vertical; }
+    input:focus, textarea:focus {
+      border-color: var(--spx-teal);
+      outline: none;
+    }
+
+    textarea { min-height: 120px; resize: vertical; }
+
+    /* MATURITY ASSESSMENT STYLES */
+    .assessment-section-title {
+      background: var(--bg-light);
+      padding: 10px 15px;
+      font-weight: bold;
+      color: var(--spx-dark-teal);
+      margin-top: 2rem;
+      border-left: 4px solid var(--spx-orange);
+    }
+
+    .question-row {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .scale-options {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .scale-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid #ddd;
+      background: white;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .scale-btn:hover { background: var(--bg-light); }
+    .scale-btn.selected {
+      background: var(--spx-teal);
+      color: white;
+      border-color: var(--spx-teal);
+      font-weight: bold;
+    }
 
     /* BUTTONS */
     .btn {
-      background-color: var(--primary);
+      background-color: var(--spx-teal);
       color: white;
       border: none;
-      padding: 12px 24px;
+      padding: 14px 28px;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-weight: bold;
-      margin-top: 1.5rem;
       transition: background 0.2s;
     }
-    .btn:hover { background-color: #008c96; }
-    .btn-secondary { background-color: #6c757d; margin-right: 10px; }
-    .btn-secondary:hover { background-color: #5a6268; }
-
-    /* MATURITY ASSESSMENT SPECIFIC */
-    .question-block { margin-bottom: 2rem; }
-    .options-row { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
-    .option-btn {
-      flex: 1;
-      padding: 10px;
+    .btn:hover { background-color: var(--spx-dark-teal); }
+    
+    .btn-back {
+      background: transparent;
+      color: #666;
+      padding: 8px 16px;
+      font-size: 1rem;
       border: 1px solid #ccc;
-      background: #f8f9fa;
-      border-radius: 4px;
-      cursor: pointer;
-      text-align: center;
-      min-width: 120px;
     }
-    .option-btn.selected {
-      background-color: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    
-    /* OUTPUT AREA (PLANNER) */
-    .output-area {
-      margin-top: 2rem;
+    .btn-back:hover { background: #eee; }
+
+    /* OUTPUT & LOADING */
+    .output-box {
+      margin-top: 3rem;
       padding: 2rem;
-      background: #f8f9fa;
-      border-left: 5px solid var(--secondary);
-      border-radius: 4px;
-    }
-    
-    .loading {
-      text-align: center;
-      color: var(--secondary);
-      font-weight: bold;
-      display: none;
+      background: var(--bg-light);
+      border-radius: 8px;
+      border-left: 6px solid var(--spx-red);
     }
 
-    /* Print styling */
+    .loader {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      color: var(--spx-teal);
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+    
+    /* PRINT */
     @media print {
-      header, .menu-grid, .form-section, .btn { display: none; }
-      .app-view { box-shadow: none; padding: 0; }
-      .output-area { border: none; padding: 0; }
+      header, .menu-grid, .btn, .btn-back { display: none; }
+      .app-view { box-shadow: none; padding: 0; margin: 0; }
+      .output-box { border: none; padding: 0; }
+      body { background: white; }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <a href="#" class="logo" onclick="goHome()">sales<span>SPARX</span></a>
-    <div class="api-key-wrapper">
-      <input type="password" id="geminiKey" placeholder="Paste Google Gemini API Key" style="margin-top:0; padding: 8px; width: 250px;">
-    </div>
-  </header>
+    <img src="wide - Copy.jpg" alt="SalesSparx" class="logo-img">
+    </header>
 
   <div class="container">
     
     <div id="view-home">
-      <div style="text-align: center; margin-bottom: 3rem;">
-        <h1 style="color: var(--primary); font-size: 2.5rem;">Wedge Account Planning Portal</h1>
-        <p style="font-size: 1.2rem; color: #666;">Select a tool to begin.</p>
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 2.8rem; margin-bottom: 0.5rem;">Wedge Portal</h1>
+        <p style="font-size: 1.2rem; color: #666;">Select an environment to begin execution.</p>
       </div>
 
       <div class="menu-grid">
         <div class="menu-card" onclick="switchView('view-maturity')">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
           <h3>AI Maturity Assessment</h3>
-          <p>Evaluate your team's readiness for AI-driven account planning. 7 Questions.</p>
+          <p>Diagnostic to baseline AI use, buyer co-creation, and inspection readiness.</p>
         </div>
 
         <div class="menu-card" onclick="switchView('view-simplified')">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
           <h3>Simplified Account Plan</h3>
-          <p>For the "Wedge" sales process. Generates a strategic plan using only outside-in public data.</p>
+          <p>Generate an "Outside-In" strategic plan using public signals and wedge methodology.</p>
         </div>
 
         <div class="menu-card" onclick="switchView('view-detailed')">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">📘</div>
           <h3>Detailed Account Plan</h3>
-          <p>Full SPX template structure. Requires internal data (revenue, relationships, whitespace).</p>
+          <p>Full SPX Template execution: Revenue gaps, evidence-based relationships, and 30/60/90 map.</p>
         </div>
       </div>
     </div>
 
     <div id="view-maturity" class="app-view hidden">
-      <button class="btn btn-secondary" onclick="goHome()">← Back</button>
-      <h2>Account Planning AI Maturity</h2>
-      <p>Assess how effectively your organization integrates AI and co-creation into planning.</p>
+      <div class="view-header">
+        <h2>AI + Buyer Co-Creation Maturity</h2>
+        <button class="btn-back" onclick="goHome()">Back to Menu</button>
+      </div>
       
-      <div id="maturity-questions"></div>
+      <p style="margin-bottom: 2rem;">
+        <strong>Instructions:</strong> Rate the organization on a scale of <strong>1 (Ad Hoc)</strong> to <strong>5 (Co-Creation + Governed)</strong>.
+      </p>
+
+      <div id="assessment-form">
+        </div>
       
-      <button class="btn" onclick="calculateMaturity()">Analyze Results</button>
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" onclick="runMaturityAnalysis()">Generate Analysis</button>
+      </div>
+
+      <div id="maturity-loader" class="loader">
+        Analyzing Scores... Comparing to Benchmarks... Generating Report...
+      </div>
       
-      <div id="maturity-result" class="output-area hidden"></div>
+      <div id="maturity-output" class="output-box hidden"></div>
     </div>
 
     <div id="view-simplified" class="app-view hidden">
-      <button class="btn btn-secondary" onclick="goHome()">← Back</button>
-      <h2>Simplified Account Plan (Wedge)</h2>
-      <p>Use this during the sales process when access to internal client data is limited.</p>
+      <div class="view-header">
+        <h2>Simplified Account Plan</h2>
+        <button class="btn-back" onclick="goHome()">Back to Menu</button>
+      </div>
+      
+      <p>Use for "Outside-In" planning when internal data is limited.</p>
 
-      <div class="form-section">
+      <div class="form-group">
         <label>Target Account Name</label>
-        <input type="text" id="simp-account" placeholder="e.g. Mayo Clinic">
-
-        <label>Account Industry / Context</label>
-        <textarea id="simp-context" placeholder="e.g. Large non-profit hospital system facing margin compression..."></textarea>
-
-        <label>Your Offering (The "Wedge")</label>
-        <textarea id="simp-offering" placeholder="e.g. Clinical workflow software that reduces nurse burnout..."></textarea>
-
-        <button class="btn" onclick="generateSimplifiedPlan()">✨ Generate Simplified Plan</button>
+        <input type="text" id="simp-account" placeholder="e.g. Cleveland Clinic">
       </div>
 
-      <div id="simp-loading" class="loading"><br>Consulting Gemini AI...<br>Analyzing Public Signals...</div>
-      <div id="simp-output" class="output-area hidden"></div>
+      <div class="form-group">
+        <label>Public Context (Signals)</label>
+        <textarea id="simp-context" placeholder="Paste recent news, 10-K risk factors, or executive quotes found online..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>The Wedge Offering</label>
+        <textarea id="simp-offering" placeholder="Briefly describe the specific solution/wedge being proposed..."></textarea>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" onclick="runSimplifiedPlan()">Generate Simplified Plan</button>
+      </div>
+
+      <div id="simp-loader" class="loader">
+        Connecting to Gemini... Aligning Signals to Offering...
+      </div>
+
+      <div id="simp-output" class="output-box hidden"></div>
     </div>
 
     <div id="view-detailed" class="app-view hidden">
-      <button class="btn btn-secondary" onclick="goHome()">← Back</button>
-      <h2>Detailed Account Plan (SPX Template)</h2>
-      <p>For active engagements. Inputs align with <em>SPX_Account_Plan_Template2025</em>.</p>
+      <div class="view-header">
+        <h2>Detailed Account Plan (SPX)</h2>
+        <button class="btn-back" onclick="goHome()">Back to Menu</button>
+      </div>
+      
+      <p>Use for active engagements with internal data access.</p>
 
-      <div class="form-section">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-          <div>
-            <label>Account Name</label>
-            <input type="text" id="det-account">
-          </div>
-          <div>
-            <label>Current SPX Revenue (FY25)</label>
-            <input type="text" id="det-revenue" placeholder="$0">
-          </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group">
+          <label>Account Name</label>
+          <input type="text" id="det-account">
         </div>
-
-        <label>Gap to Goal (The Financial Math)</label>
-        <input type="text" id="det-gap" placeholder="e.g. Need $500k in new expansion revenue">
-
-        <label>Known Whitespace (Where can we sell?)</label>
-        <textarea id="det-whitespace" placeholder="List areas: 1. RevOps (Signal Present), 2. Org Design (No Signal)..."></textarea>
-
-        <label>Key Relationships (Who do we know?)</label>
-        <textarea id="det-relationships" placeholder="e.g. CFO (Trusted Advisor), CIO (Unknown), VP Sales (Blocker)"></textarea>
-
-        <label>Strategic Objective</label>
-        <textarea id="det-strategy" placeholder="What is the Single Sales Objective?"></textarea>
-
-        <button class="btn" onclick="generateDetailedPlan()">✨ Generate Detailed Plan</button>
+        <div class="form-group">
+          <label>Gap to Goal ($)</label>
+          <input type="text" id="det-gap" placeholder="$500,000 Gap">
+        </div>
       </div>
 
-      <div id="det-loading" class="loading"><br>Consulting Gemini AI...<br>Structuring Deep Analysis...</div>
-      <div id="det-output" class="output-area hidden"></div>
+      <div class="form-group">
+        <label>Whitespace Analysis (Signal vs. No Signal)</label>
+        <textarea id="det-whitespace" placeholder="1. RevOps (Strong Signal: New CRO hired)&#10;2. Clinical Training (No Signal: Budget freeze)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Relationship Map (Evidence-Based)</label>
+        <textarea id="det-relationships" placeholder="List key stakeholders and their 'Evidence Score' (e.g. Trusted Advisor, Awareness)..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Account Strategy (The "Why")</label>
+        <textarea id="det-strategy" placeholder="Why Change? Why Now? Why Us?"></textarea>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="btn" onclick="runDetailedPlan()">Generate Detailed Plan</button>
+      </div>
+
+      <div id="det-loader" class="loader">
+        Structuring Data... Applying SPX Template Logic...
+      </div>
+
+      <div id="det-output" class="output-box hidden"></div>
     </div>
 
   </div>
 
 <script>
 /* =========================================
-   1. NAVIGATION LOGIC
+   1. NAVIGATION
    ========================================= */
 function goHome() {
   document.querySelectorAll('.app-view').forEach(el => el.classList.add('hidden'));
@@ -296,183 +397,216 @@ function switchView(viewId) {
 /* =========================================
    2. MATURITY ASSESSMENT LOGIC
    ========================================= */
-const maturityQuestions = [
-  { id: 1, text: "Data Readiness: Is account data centralized and accessible?", options: ["Scatterred/Manual", "Some Centralization", "CRM Integrated", "Clean API Access", "Fully AI Ready"] },
-  { id: 2, text: "Buyer Signals: How do you track 'Why Change Now'?", options: ["Ad-hoc Search", "Manual Alerts", "Basic Tools", "Automated Feeds", "AI Signal Mapping"] },
-  { id: 3, text: "Co-Creation: How often do you validate plans with clients?", options: ["Never", "Rarely", "Sometimes", "Often", "Always (Live)"] },
-  { id: 4, text: "Expansion Logic: How is whitespace identified?", options: ["Guesswork", "Rep Intuition", "Manual Mapping", "Data-Driven", "AI Predictive"] },
-  { id: 5, text: "Inspection: Can leadership audit plans instantly?", options: ["No (Docs)", "No (Meetings)", "Somewhat", "Yes (Dashboards)", "Yes (AI Rubric)"] },
-  { id: 6, text: "Relationship Scoring: How do you measure influence?", options: ["Subjective", "Vague", "Defined Levels", "Evidence-Based", "Automated Scoring"] },
-  { id: 7, text: "Prompt Engineering: Do you use standardized AI prompts?", options: ["None", "Ad-hoc", "Some Templates", "Library Exists", "Integrated Workflow"] }
+const assessmentData = [
+  {
+    category: "A. AI Use in Account Planning",
+    questions: [
+      "1. Do teams use AI to generate account insights from public + internal sources (not just Google research)?",
+      "2. Are AI outputs captured in the account plan template (not in random notes)?",
+      "3. Do teams use AI to identify whitespace AND segment it by buyer signal vs no buyer signal?",
+      "4. Do teams use AI to generate hypotheses for 'Why Change / Why Now / Why SPX'?"
+    ]
+  },
+  {
+    category: "B. Buyer Co-Creation + Relationship Quality",
+    questions: [
+      "5. How consistently are 'buyer signal' and change urgency validated directly with the buyer (vs assumed)?",
+      "6. Do teams use AI to prepare buyer-facing 'co-creation' discussion guides?",
+      "7. Do account plans include evidence-based relationship scoring (not opinions)?",
+      "8. Is AI used to map stakeholders, buying committee dynamics, and decision process gaps?"
+    ]
+  },
+  {
+    category: "C. Leadership Inspection + Governance",
+    questions: [
+      "9. Can leadership inspect plan quality with a standard rubric/scorecard across accounts?",
+      "10. Is there governance for AI use (validation rules, citations, what must be confirmed by buyer)?"
+    ]
+  }
 ];
 
+let assessmentScores = new Array(10).fill(0);
+
 // Render Questions
-const qContainer = document.getElementById('maturity-questions');
-maturityQuestions.forEach((q, idx) => {
-  const html = `
-    <div class="question-block" id="qblock-${idx}">
-      <label>${idx+1}. ${q.text}</label>
-      <div class="options-row">
-        ${q.options.map((opt, optIdx) => `
-          <div class="option-btn" onclick="selectOption(${idx}, ${optIdx+1}, this)">${opt}</div>
-        `).join('')}
+const formContainer = document.getElementById('assessment-form');
+let qIndex = 0;
+
+assessmentData.forEach(section => {
+  const sectionDiv = document.createElement('div');
+  sectionDiv.innerHTML = `<div class="assessment-section-title">${section.category}</div>`;
+  formContainer.appendChild(sectionDiv);
+
+  section.questions.forEach(qText => {
+    const currentIdx = qIndex; // capture index closure
+    const row = document.createElement('div');
+    row.className = 'question-row';
+    
+    let buttonsHtml = '';
+    for(let i=1; i<=5; i++) {
+      buttonsHtml += `<div class="scale-btn" onclick="setScore(${currentIdx}, ${i}, this)">${i}</div>`;
+    }
+
+    row.innerHTML = `
+      <label>${qText}</label>
+      <div class="scale-options" id="q-row-${currentIdx}">
+        ${buttonsHtml}
       </div>
-    </div>
-  `;
-  qContainer.insertAdjacentHTML('beforeend', html);
+    `;
+    formContainer.appendChild(row);
+    qIndex++;
+  });
 });
 
-let maturityScores = new Array(maturityQuestions.length).fill(0);
-
-function selectOption(qIdx, score, elem) {
-  maturityScores[qIdx] = score;
-  // Visual Feedback
-  const parent = document.getElementById(`qblock-${qIdx}`);
-  parent.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
-  elem.classList.add('selected');
+function setScore(idx, score, btn) {
+  assessmentScores[idx] = score;
+  // Visuals
+  const row = document.getElementById(`q-row-${idx}`);
+  row.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
 }
 
-async function calculateMaturity() {
-  if (maturityScores.includes(0)) { alert("Please answer all questions."); return; }
-  
-  const total = maturityScores.reduce((a,b) => a+b, 0);
-  const avg = (total / maturityQuestions.length).toFixed(1);
-  
-  // Call Gemini for the textual analysis
-  const prompt = `
-    You are an expert Sales Consultant. A client just took an "AI Account Planning Maturity Assessment".
-    Their Score: ${avg} / 5.
-    
-    Rubric:
-    1-2: Emerging (Reactive, Manual)
-    3-4: Advanced (Process-driven, some tools)
-    5: Leading (AI-native, Predictive)
+async function runMaturityAnalysis() {
+  if(assessmentScores.includes(0)) {
+    alert("Please answer all 10 questions to generate a valid score.");
+    return;
+  }
 
-    Generate a concise HTML summary (no markdown backticks) with:
-    <h3>Maturity Level: [Insert Level]</h3>
-    <p>Summary of their status.</p>
-    <ul>3 bullet points on specific next steps to improve their score.</ul>
+  const totalScore = assessmentScores.reduce((a,b) => a+b, 0);
+  let tier = "";
+  if(totalScore <= 20) tier = "Tier 1: Ad Hoc";
+  else if(totalScore <= 30) tier = "Tier 2: Experimental";
+  else if(totalScore <= 40) tier = "Tier 3: Operational";
+  else if(totalScore <= 45) tier = "Tier 4: Integrated";
+  else tier = "Tier 5: Co-Creation + Governed";
+
+  document.getElementById('maturity-loader').style.display = 'block';
+  document.getElementById('maturity-output').classList.add('hidden');
+
+  // Prepare Prompt for Gemini
+  const prompt = `
+    You are a Senior Consultant at SalesSparx.
+    A client completed the "AI + Buyer Co-Creation Maturity Assessment".
+    
+    RESULTS:
+    Total Score: ${totalScore} / 50
+    Maturity Tier: ${tier}
+    
+    Scores by Question (1-5):
+    ${assessmentScores.map((s,i) => `Q${i+1}: ${s}`).join(', ')}
+    
+    (Note: Q1-4 are AI Use, Q5-8 are Co-Creation, Q9-10 are Inspection).
+    
+    TASK:
+    Generate a 1-page HTML summary (no markdown backticks, use <h3> and <ul>).
+    
+    Structure:
+    1. <h3>Executive Summary</h3>: One paragraph defining their current maturity state.
+    2. <h3>Top 3 Strengths</h3>: Identify 3 areas where they scored high (or relatively high).
+    3. <h3>Top 3 Gaps</h3>: Identify 3 critical low-scoring areas (Focus on Buyer Signal, Inspection, or AI usage).
+    4. <h3>Immediate Action Plan</h3>: 3 bullet points mapping their gaps to specific "Wedge" deliverables (e.g., Install the Inspection Scorecard, Deploy Standard Prompts).
   `;
 
-  document.getElementById('maturity-result').classList.remove('hidden');
-  document.getElementById('maturity-result').innerHTML = "Analyzing scores...";
+  const output = await callGemini(prompt);
   
-  const response = await callGemini(prompt);
-  document.getElementById('maturity-result').innerHTML = response;
+  document.getElementById('maturity-loader').style.display = 'none';
+  const outBox = document.getElementById('maturity-output');
+  outBox.innerHTML = `
+    <h2 style="color:var(--spx-teal); margin-top:0;">Assessment Result: ${tier}</h2>
+    <div style="font-size:2rem; font-weight:bold; margin-bottom:20px;">Score: ${totalScore}/50</div>
+    ${output}
+  `;
+  outBox.classList.remove('hidden');
 }
 
 /* =========================================
    3. SIMPLIFIED PLANNER LOGIC
    ========================================= */
-async function generateSimplifiedPlan() {
+async function runSimplifiedPlan() {
   const account = document.getElementById('simp-account').value;
   const context = document.getElementById('simp-context').value;
   const offering = document.getElementById('simp-offering').value;
-  
-  if(!account) { alert("Please enter an account name."); return; }
 
-  const prompt = `
-    Act as a Senior Account Strategist. 
-    Create a "Simplified Account Plan" for the Wedge Offering.
-    
-    TARGET ACCOUNT: ${account}
-    CONTEXT: ${context}
-    OFFERING: ${offering}
-    
-    Constraint: You do NOT have inside information. Do not invent specific relationships. Focus on Public Signals (10-Ks, News).
-    
-    Generate output in clear HTML format (no markdown backticks, use <h3> for headers):
-    
-    1. <h3>Executive Summary</h3>: 3 bullet points on why they need to change NOW (Industry Pains).
-    2. <h3>Outside-In Whitespace Map</h3>: Create an HTML Table with columns "Business Objective", "Why Change Now (Signal)", "Our Wedge Solution". List 3 rows.
-    3. <h3>The Hook</h3>: Draft a cold email intro (3 sentences) linking a public event to the offering.
-  `;
+  if(!account) { alert("Please enter a Target Account."); return; }
 
-  document.getElementById('simp-loading').style.display = 'block';
+  document.getElementById('simp-loader').style.display = 'block';
   document.getElementById('simp-output').classList.add('hidden');
 
-  const response = await callGemini(prompt);
+  const prompt = `
+    Act as a SalesSparx Strategist. Create a "Simplified Account Plan" (Outside-In).
+    
+    TARGET: ${account}
+    CONTEXT/SIGNALS: ${context}
+    WEDGE OFFERING: ${offering}
+    
+    OUTPUT FORMAT (HTML, No Markdown):
+    1. <h3>Executive Context</h3>: 3 bullet points on the "Why Change Now" forces hitting this account.
+    2. <h3>Whitespace Map (Outside-In)</h3>: HTML Table with columns: "Business Priority", "Observed Signal", "Proposed Wedge Alignment".
+    3. <h3>The Hook</h3>: A 3-sentence email opening linking a specific signal to the Wedge Offering.
+  `;
 
-  document.getElementById('simp-loading').style.display = 'none';
-  document.getElementById('simp-output').innerHTML = response;
+  const output = await callGemini(prompt);
+  document.getElementById('simp-loader').style.display = 'none';
+  document.getElementById('simp-output').innerHTML = output;
   document.getElementById('simp-output').classList.remove('hidden');
 }
 
 /* =========================================
    4. DETAILED PLANNER LOGIC
    ========================================= */
-async function generateDetailedPlan() {
+async function runDetailedPlan() {
   const account = document.getElementById('det-account').value;
-  const revenue = document.getElementById('det-revenue').value;
   const gap = document.getElementById('det-gap').value;
   const whitespace = document.getElementById('det-whitespace').value;
-  const rels = document.getElementById('det-relationships').value;
+  const relationships = document.getElementById('det-relationships').value;
   const strategy = document.getElementById('det-strategy').value;
 
-  if(!account) { alert("Please enter account details."); return; }
+  if(!account) { alert("Please enter Account Name."); return; }
+
+  document.getElementById('det-loader').style.display = 'block';
+  document.getElementById('det-output').classList.add('hidden');
 
   const prompt = `
     Act as a SalesSparx Account Planning Expert.
-    Create a "Detailed Account Plan" following the SPX Template structure.
+    Create a "Detailed Account Plan" strictly following the SPX 2025 Template logic.
 
-    CLIENT DATA:
+    INPUTS:
     Account: ${account}
-    Revenue: ${revenue}
-    Gap to Goal: ${gap}
-    Whitespace: ${whitespace}
-    Relationships: ${rels}
-    Strategy: ${strategy}
+    Financial Gap: ${gap}
+    Whitespace Analysis: ${whitespace}
+    Relationships: ${relationships}
+    Core Strategy: ${strategy}
 
-    Generate output in clear HTML format (no markdown backticks). Style with CSS classes provided in the page.
-    
-    Structure:
-    1. <h3>Account Overview</h3>: Table showing Current Revenue vs Goal.
-    2. <h3>Gap Analysis</h3>: Analyze the "${gap}" and suggest if the identified whitespace (${whitespace}) is sufficient to cover it.
-    3. <h3>Relationship Map (Evidence-Based)</h3>: Create a table of the relationships provided. Add a column "Recommended Next Action" for each person based on their status.
-    4. <h3>Strategic Narrative</h3>: Write a "Why Change, Why Now, Why Us" narrative based on the strategy input.
-    5. <h3>30/60/90 Day Execution Plan</h3>: Bullet points for immediate actions.
+    OUTPUT FORMAT (HTML, No Markdown):
+    1. <h3>Account Overview</h3>: Summarize the Gap to Goal and whether the identified Whitespace is sufficient to close it.
+    2. <h3>Relationship Health</h3>: Analyze the provided relationships. Are there enough "Trusted Advisors" to execute the strategy?
+    3. <h3>Strategy Narrative</h3>: Refine the "Why Change / Why Now / Why Us" narrative into a professional statement.
+    4. <h3>30/60/90 Day Execution Map</h3>: Create a table for Days 30, 60, and 90 with columns "Focus Area" and "Key Action". Focus on validation and co-creation.
   `;
 
-  document.getElementById('det-loading').style.display = 'block';
-  document.getElementById('det-output').classList.add('hidden');
-
-  const response = await callGemini(prompt);
-
-  document.getElementById('det-loading').style.display = 'none';
-  document.getElementById('det-output').innerHTML = response;
+  const output = await callGemini(prompt);
+  document.getElementById('det-loader').style.display = 'none';
+  document.getElementById('det-output').innerHTML = output;
   document.getElementById('det-output').classList.remove('hidden');
 }
 
-/* /* =========================================
-   5. GEMINI API CALLER
+/* =========================================
+   5. GEMINI API HANDLER (RENDER READY)
    ========================================= */
 async function callGemini(promptText) {
-  
-  // LOGIC:
-  // 1. If Render replaced "INSERT_API_KEY_HERE" with a real key, use it.
-  // 2. Otherwise, grab whatever is typed in the input box at the top of the screen.
-  
+  // RENDER INJECTION POINT
+  // The Build Command will replace "INSERT_API_KEY_HERE" with the real env var.
   const renderKey = "AIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY"; 
   
-  // Check if the placeholder is still there or if Render replaced it
-  const apiKey = renderKey !== "IAIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY" 
-    ? renderKey 
-    : document.getElementById('geminiKey').value;
-
-  if (!apiKey) {
-    alert("Please paste your Gemini API Key in the top right corner.");
-    // Hide loading spinners if they are active
-    if(document.getElementById('simp-loading')) document.getElementById('simp-loading').style.display = 'none';
-    if(document.getElementById('det-loading')) document.getElementById('det-loading').style.display = 'none';
-    return "API Key Missing";
+  // Validation
+  if (renderKey === "AIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY") {
+    alert("Configuration Error: API Key not injected. If you are running locally, you must manually insert the key in the code or use the Render deployment method.");
+    return "<p style='color:red'>API Key Error.</p>";
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${renderKey}`;
   
   const payload = {
-    contents: [{
-      parts: [{ text: promptText }]
-    }]
+    contents: [{ parts: [{ text: promptText }] }]
   };
 
   try {
@@ -483,15 +617,15 @@ async function callGemini(promptText) {
     });
 
     const data = await response.json();
-    if (data.error) {
-      return `Error: ${data.error.message}`;
-    }
+    if (data.error) return `<strong>API Error:</strong> ${data.error.message}`;
     
-    let rawText = data.candidates[0].content.parts[0].text;
-    // Clean up Markdown code blocks if Gemini sends them
-    return rawText.replace(/```html/g, '').replace(/```/g, '');
+    let raw = data.candidates[0].content.parts[0].text;
+    return raw.replace(/```html/g, '').replace(/```/g, ''); // Clean markdown
 
   } catch (error) {
-    return `Connection Error: ${error.message}`;
+    return `<strong>Connection Error:</strong> ${error.message}`;
   }
 }
+</script>
+</body>
+</html>
