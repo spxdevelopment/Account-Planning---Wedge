@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SalesSparx Wedge Portal</title>
+  <title>SalesSparx Account Planning Portal</title>
   <style>
     /* =========================================
        CORE BRANDING & CLEAN UI
@@ -24,7 +24,7 @@
       font-family: 'Avenir', 'Helvetica Neue', Arial, sans-serif;
       background-color: var(--bg-gray);
       color: var(--text-main);
-      font-size: 14px; /* Smaller base font */
+      font-size: 14px;
       line-height: 1.5;
     }
 
@@ -219,7 +219,7 @@
 
   <header class="no-print">
     <img src="wide - Copy.jpg" alt="SalesSparx" class="logo-img">
-    <div style="font-size: 0.85rem; color: var(--text-light); font-weight: 600;">Wedge Account Planner</div>
+    <div style="font-size: 0.85rem; color: var(--text-light); font-weight: 600;">Account Planning Portal</div>
   </header>
 
   <div class="container no-print" id="main-lobby">
@@ -363,7 +363,7 @@
       <div class="form-group">
         <label>Account Strategy (The "Why")</label>
         <span class="sub-label">Why Change? Why Now? Why Us?</span>
-        <textarea id="det-strategy" placeholder="Strategic narrative connecting buyer pains to our wedge..."></textarea>
+        <textarea id="det-strategy" placeholder="Strategic narrative connecting buyer pains to our offering..."></textarea>
       </div>
 
       <div style="text-align: right; margin-top: 20px;">
@@ -478,7 +478,7 @@ async function generateMaturityReport() {
       <h3>Top 3 Gaps</h3>
       <ul>[List 3 low scoring areas]</ul>
       
-      <h3>Recommended Roadmap (The Wedge)</h3>
+      <h3>Recommended Roadmap</h3>
       <ul>
         <li><strong>Immediate:</strong> [Action 1]</li>
         <li><strong>30 Days:</strong> [Action 2]</li>
@@ -516,7 +516,7 @@ async function runSimplifiedGen() {
     INSTRUCTIONS:
     1. Research the Buyer (${buyer}) using public knowledge (Recent 10-K, Press, Industry trends).
     2. Identify "Why Change Now" signals relevant to the Seller's domain.
-    3. Map the "Wedge" opportunity.
+    3. Map the "Account Planning" opportunity.
 
     OUTPUT FORMAT (Clean HTML for PDF):
     <div style="font-family: sans-serif;">
@@ -532,7 +532,7 @@ async function runSimplifiedGen() {
 
       <h3 style="color:#1F2933">2. Whitespace Map (Outside-In)</h3>
       <table border="1" cellpadding="8" style="border-collapse: collapse; width: 100%; border-color:#ddd;">
-        <tr style="background:#f4f4f4;"><th>Business Objective</th><th>Observed Signal</th><th>Proposed Wedge</th></tr>
+        <tr style="background:#f4f4f4;"><th>Business Objective</th><th>Observed Signal</th><th>Proposed Offering</th></tr>
         <tr><td>[Obj 1]</td><td>[Signal]</td><td>[Solution]</td></tr>
         <tr><td>[Obj 2]</td><td>[Signal]</td><td>[Solution]</td></tr>
       </table>
@@ -540,7 +540,7 @@ async function runSimplifiedGen() {
       <h3 style="color:#1F2933">3. The "Hook" (Email Draft)</h3>
       <div style="border:1px dashed #999; padding:15px; background:#fafafa;">
         <p><strong>Subject:</strong> [Compelling Subject Line]</p>
-        <p>[3-Sentence Body connecting their public signal to your wedge outcome]</p>
+        <p>[3-Sentence Body connecting their public signal to your outcome]</p>
       </div>
     </div>
   `;
@@ -624,11 +624,15 @@ async function runGemini(promptText) {
   document.getElementById('loader').style.display = 'block';
   document.getElementById('active-output').style.display = 'none';
 
-  // RENDER INJECTION
+  // !!! CRITICAL: 
+  // If running locally, REPLACE "INSERT_API_KEY_HERE" with your actual key "AIza..."
+  // If running on Render, leave it as is (Render will inject the key).
+  
   const renderKey = "AIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY"; 
   
+  // Validation: Check if the key is still the placeholder
   if (renderKey === "AIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY") {
-    alert("API Key missing. This must be deployed on Render with the Build Command configured.");
+    alert("Connection Error: API Key not found. If running locally, paste your key in the code. If on Render, check your Build Command.");
     document.getElementById('loader').style.display = 'none';
     return;
   }
