@@ -1,7 +1,7 @@
 {
-  "name": "spx-backend",
-  "type": "module",
+  "name": "spx-account-planning-portal",
   "version": "1.0.0",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
