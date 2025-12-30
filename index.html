@@ -444,6 +444,7 @@
 // =======================================================
 // 1. API KEY CONFIGURATION
 // =======================================================
+// IMPORTANT: You MUST paste a new, valid API Key here.
 const GEMINI_API_KEY = "AIzaSyADui5iZ_66DIxWqASR3T3FTTPyDWQe4mk"; 
 
 /* =========================================
@@ -512,7 +513,6 @@ async function runMaturity() {
   if (matScores.includes(0)) { alert("Please rate all 10 questions."); return; }
   
   const score = matScores.reduce((a,b)=>a+b,0);
-  // Calculate category averages for Chart
   const aiScore = (matScores[0]+matScores[1]+matScores[2]+matScores[3])/4;
   const coScore = (matScores[4]+matScores[5]+matScores[6]+matScores[7])/4;
   const govScore = (matScores[8]+matScores[9])/2;
@@ -520,24 +520,17 @@ async function runMaturity() {
   const prompt = `
     Role: SalesSparx Senior Partner.
     Task: Generate a Detailed Maturity Assessment Report.
-    
-    DATA:
-    Total Score: ${score}/50.
-    Category Breakdown -> AI Use: ${aiScore}/5. Co-Creation: ${coScore}/5. Governance: ${govScore}/5.
+    DATA: Score ${score}/50. AI Readiness: ${aiScore}/5. Co-Creation: ${coScore}/5. Governance: ${govScore}/5.
     
     OUTPUT FORMAT (HTML):
     <h1 style="color:#4CA09A; border-bottom:3px solid #000; padding-bottom:10px;">Maturity Assessment Report</h1>
-    
     <div style="background:#f4f4f4; padding:20px; border-left:6px solid #CA2027; margin:20px 0;">
       <h2 style="margin:0;">Total Score: ${score}/50</h2>
-      <p style="margin:5px 0;"><strong>Status:</strong> ${score < 20 ? 'Ad Hoc' : score < 30 ? 'Experimental' : score < 40 ? 'Operational' : score < 45 ? 'Integrated' : 'Co-Creation'}</p>
+      <p style="margin:5px 0;"><strong>Status:</strong> ${score < 30 ? 'Ad Hoc / Emerging' : score < 40 ? 'Operational' : 'Strategic Co-Creation'}</p>
     </div>
-    
     <div class="chart-container"><canvas id="matChart"></canvas></div>
-
     <h3 style="color:#1F2933; margin-top:30px;">Executive Summary</h3>
     <p>[Write 1 paragraph analyzing their maturity. Be direct and professional.]</p>
-
     <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px;">
       <div style="border:1px solid #ddd; padding:15px;">
         <h4 style="color:#4CA09A; margin-top:0;">Top Strengths</h4>
@@ -548,7 +541,6 @@ async function runMaturity() {
         <ul>[List 3 specific gaps based on low scores]</ul>
       </div>
     </div>
-
     <h3 style="color:#1F2933;">Recommended Roadmap</h3>
     <table border="1" style="width:100%; border-collapse:collapse; border-color:#eee;">
       <tr style="background:#f9f9f9;"><th>Phase</th><th>Focus Area</th><th>Key Deliverable</th></tr>
@@ -732,20 +724,23 @@ async function runDetailed() {
 }
 
 // ===========================================
-// ROBUST GEMINI CALLER (3-MODEL FALLBACK)
+// ROBUST GEMINI CALLER (3-MODEL FALLBACK - STABLE V1)
 // ===========================================
 async function callGemini(prompt) {
   document.getElementById('loader').style.display = 'block';
   document.getElementById('output-wrapper').style.display = 'none';
 
-  let modelList = ['gemini-1.5-flash', 'gemini-pro', 'gemini-1.0-pro'];
+  // Fallback List: Try Gemini Pro on Stable v1 first (Safest)
+  const attempts = [
+    { url: `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}` },
+    { url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}` }
+  ];
+
   let finalError = "";
 
-  for (let model of modelList) {
-    console.log("Trying model:", model);
+  for (let attempt of attempts) {
     try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
-      const response = await fetch(url, {
+      const response = await fetch(attempt.url, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
@@ -758,7 +753,7 @@ async function callGemini(prompt) {
         return data.candidates[0].content.parts[0].text.replace(/```html/g, '').replace(/```/g, '');
       } else {
         finalError = data.error.message;
-        console.warn(`${model} failed:`, finalError);
+        console.warn(`Attempt failed:`, finalError);
       }
     } catch (e) {
       finalError = e.message;
@@ -766,7 +761,7 @@ async function callGemini(prompt) {
   }
 
   document.getElementById('loader').style.display = 'none';
-  alert(`AI Error: All models failed. Last error: ${finalError}. Please check your API Key.`);
+  alert(`AI Error: Connection failed. \n\nReason: ${finalError}\n\nSolution: Please verify you have generated a NEW API Key at aistudio.google.com and pasted it into line 635.`);
   return null;
 }
 
