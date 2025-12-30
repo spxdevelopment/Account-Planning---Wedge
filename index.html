@@ -443,15 +443,27 @@ async function generateDetailedPlan() {
   document.getElementById('det-output').classList.remove('hidden');
 }
 
-/* =========================================
+/* /* =========================================
    5. GEMINI API CALLER
    ========================================= */
 async function callGemini(promptText) {
-  const apiKey = document.getElementById('AIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY').value;
+  
+  // LOGIC:
+  // 1. If Render replaced "INSERT_API_KEY_HERE" with a real key, use it.
+  // 2. Otherwise, grab whatever is typed in the input box at the top of the screen.
+  
+  const renderKey = "AIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY"; 
+  
+  // Check if the placeholder is still there or if Render replaced it
+  const apiKey = renderKey !== "IAIzaSyCaRrxI3auvsS_DyMbp-dpl1NMssS8xrwY" 
+    ? renderKey 
+    : document.getElementById('geminiKey').value;
+
   if (!apiKey) {
     alert("Please paste your Gemini API Key in the top right corner.");
-    document.getElementById('simp-loading').style.display = 'none';
-    document.getElementById('det-loading').style.display = 'none';
+    // Hide loading spinners if they are active
+    if(document.getElementById('simp-loading')) document.getElementById('simp-loading').style.display = 'none';
+    if(document.getElementById('det-loading')) document.getElementById('det-loading').style.display = 'none';
     return "API Key Missing";
   }
 
@@ -483,7 +495,3 @@ async function callGemini(promptText) {
     return `Connection Error: ${error.message}`;
   }
 }
-</script>
-
-</body>
-</html>
