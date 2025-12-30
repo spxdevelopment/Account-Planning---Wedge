@@ -441,18 +441,21 @@
   </div>
 
 <script>
-// =======================================================
-// 1. API KEY CONFIGURATION (OPENAI)
-// =======================================================
-const OPENAI_API_KEY = "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"; 
+/* =======================================================
+   1) BACKEND CONFIGURATION (Render Proxy)
+   IMPORTANT:
+   - Replace API_BASE with your Render backend URL
+   - Example: https://spx-account-planning-proxy.onrender.com
+   ======================================================= */
+const API_BASE = "https://account-planning-portal.onrender.com";
 
 /* =========================================
    NAVIGATION LOGIC
    ========================================= */
 function goHome() {
-  document.querySelectorAll('.container').forEach(c => {
-    if(c.id !== 'lobby' && c.id !== 'output-wrapper') c.classList.add('hidden');
-  });
+  document.getElementById('view-maturity').classList.add('hidden');
+  document.getElementById('view-simplified').classList.add('hidden');
+  document.getElementById('view-detailed').classList.add('hidden');
   document.getElementById('lobby').classList.remove('hidden');
   document.getElementById('output-wrapper').style.display = 'none';
 }
@@ -721,45 +724,35 @@ async function runDetailed() {
   if(html) renderOutput(html);
 }
 
-// ===========================================
-// OPENAI CALLER (GPT-4o)
-// ===========================================
+/* =========================================
+   BACKEND CALLER (Render Proxy)
+   ========================================= */
 async function callOpenAI(prompt) {
   document.getElementById('loader').style.display = 'block';
   document.getElementById('output-wrapper').style.display = 'none';
 
-  const url = "https://api.openai.com/v1/chat/completions";
-  
   try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          {role: "system", content: "You are a senior enterprise sales strategist."},
-          {role: "user", content: prompt}
-        ]
-      })
+    const response = await fetch(`${API_BASE}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, model: "gpt-4o-mini" })
     });
 
     const data = await response.json();
-    
-    if (data.error) {
-      document.getElementById('loader').style.display = 'none';
-      alert("OpenAI Error: " + data.error.message);
+    document.getElementById('loader').style.display = 'none';
+
+    if (!response.ok) {
+      alert("Server Error: " + (data.error || response.statusText));
+      console.error("Backend error:", data);
       return null;
     }
 
-    document.getElementById('loader').style.display = 'none';
-    return data.choices[0].message.content.replace(/```html/g, '').replace(/```/g, '');
+    return (data.html || "").replace(/```html/g, "").replace(/```/g, "");
 
   } catch (e) {
     document.getElementById('loader').style.display = 'none';
     alert("Network Error: " + e.message);
+    console.error("Network error:", e);
     return null;
   }
 }
@@ -780,4 +773,3 @@ function renderOutput(html) {
 </script>
 </body>
 </html>
-
