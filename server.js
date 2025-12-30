@@ -1,17 +1,25 @@
 import express from "express";
 import cors from "cors";
 import OpenAI from "openai";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Serve static frontend from /public
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
-  res.send("SalesSparx backend is running.");
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// API route used by your frontend
 app.post("/api/chat", async (req, res) => {
   try {
     const { prompt, model = "gpt-4o-mini" } = req.body;
@@ -26,10 +34,16 @@ app.post("/api/chat", async (req, res) => {
       ]
     });
 
-    res.json({ html: completion.choices[0].message.content });
+    return res.json({ html: completion.choices[0].message.content });
   } catch (e) {
-    res.status(500).json({ error: e.message });
+    console.error("API Error:", e);
+    return res.status(500).json({ error: e.message });
   }
+});
+
+// Fallback (SPA behavior): any route returns index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const port = process.env.PORT || 3000;
